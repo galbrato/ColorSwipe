@@ -81,6 +81,5 @@ public class ThingyController : MonoBehaviour {
 		if (inputs != Vector2.zero){
 			addVelocity(inputs);
 		}
-
 	}
 }
