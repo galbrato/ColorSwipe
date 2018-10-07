@@ -18,11 +18,19 @@ public class ThingySpawner : MonoBehaviour {
 	public Transform thingyCounter;
 		
 	void Start () {
-		rend = this.GetComponent<SpriteRenderer>();
+        float x = Camera.main.orthographicSize * ((float)Screen.width / (float)Screen.height) + 0.5f;
+        float y = Camera.main.orthographicSize - 0.1f;
+
+        transform.position = new Vector3(0f, y);
+        transform.localScale = new Vector2(2 * x, 0.1f);
+
+        rend = this.GetComponent<SpriteRenderer>();
 
 		startingPoint = rend.bounds.min;
 		offsetRange = rend.bounds.size.x;
-	}
+
+        
+    }
 
 	void spawnThingy(){
 		GameObject newThingy = (GameObject) Instantiate(thingyPrefab, thingyCounter);
@@ -39,11 +47,9 @@ public class ThingySpawner : MonoBehaviour {
 		Vector2 thingyVelocity = new Vector2(Random.Range(-0.8f, 0.8f), -Random.Range(0.2f, 1f));
 		thingyVelocity.Normalize();
 		thingyVelocity *= velocityFactor;
-		Debug.Log(thingyVelocity);
 
 		rigidThingy.velocity = thingyVelocity;
 
-		Debug.Log("thingy spawned!");
 	}
 	
 	void Update () {
