@@ -17,7 +17,7 @@ public class SubRegionBehaviour : MonoBehaviour {
         SpriteRenderer[] sVector = GetComponentsInChildren<SpriteRenderer>();
         Effect = sVector[1];
         Effect.size = sprite.size;
-        timer = 0;
+        timer = TimeToFill;
 
         mColl = GetComponent<BoxCollider2D>();
         
@@ -47,7 +47,10 @@ public class SubRegionBehaviour : MonoBehaviour {
         timer = 0;
     }
     private void OnTriggerStay2D(Collider2D collision) {
-        Destroy(collision.gameObject);
-        //Add points
+        if (collision.CompareTag("Thingy")) {
+            Destroy(collision.gameObject);
+            PointManager.instance.addPoints(1);
+        }
+        
     }
 }

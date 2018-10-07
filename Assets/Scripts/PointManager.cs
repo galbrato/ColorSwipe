@@ -22,7 +22,7 @@ public class PointManager : MonoBehaviour {
 		updatePointsUI();
 	}
 
-	void addPoints(int points){
+	public void addPoints(int points){
 		this.points += points;
 		updatePointsUI();
 	}
@@ -31,7 +31,4 @@ public class PointManager : MonoBehaviour {
 		pointsUI.text = points.ToString();
 	}
 	
-	void Update () {
-		if (Input.GetKeyDown("down")) addPoints(10);		
-	}
 }
