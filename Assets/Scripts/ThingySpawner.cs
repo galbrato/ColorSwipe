@@ -47,11 +47,9 @@ public class ThingySpawner : MonoBehaviour {
 		Vector2 thingyVelocity = new Vector2(Random.Range(-0.8f, 0.8f), -Random.Range(0.2f, 1f));
 		thingyVelocity.Normalize();
 		thingyVelocity *= velocityFactor;
-		Debug.Log(thingyVelocity);
 
 		rigidThingy.velocity = thingyVelocity;
 
-		Debug.Log("thingy spawned!");
 	}
 	
 	void Update () {
