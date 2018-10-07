@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ThingyController : MonoBehaviour {
 	private Rigidbody2D rigid;
+	private Transform transf;
 	public float velocityFactor;
 
 	public static float swipeMinimumDistance = 5f;
@@ -12,9 +13,19 @@ public class ThingyController : MonoBehaviour {
 	private bool isSwipeCheckUsed = false;
 	private Vector2 swipeStart;
 	private string swipeResult = null;
+
+	private Vector2 cameraReference = Vector2.zero;
+
+	public float swipeCooldown;
+	private float swipeTime = 0f;
+	private bool isSwipeInCooldown = false;
 		
 	void Start () {
 		rigid = this.GetComponent<Rigidbody2D>();
+		transf = this.GetComponent<Transform>();
+
+		cameraReference.y = Camera.main.orthographicSize;
+		cameraReference.x = Camera.main.orthographicSize * ((float) Screen.width / (float) Screen.height);
 	}
 
 	Vector2 checkInput(){
@@ -22,17 +33,20 @@ public class ThingyController : MonoBehaviour {
 
 		// checking left swipe/key
 		if (Input.GetKeyDown("left") || (isSwipeCheckFinalized && !isSwipeCheckUsed && swipeResult == "left")){
-			inputs += Vector2.left;
+			float leftMult = (transf.position.x + cameraReference.x)/(2*cameraReference.x);
+			inputs += Vector2.left * leftMult;
 		}
 
 		// checking right swipe/key
 		if (Input.GetKeyDown("right") || (isSwipeCheckFinalized && !isSwipeCheckUsed && swipeResult == "right")){
-			inputs += Vector2.right;
+			float rightMult = (2*cameraReference.x - (transf.position.x + cameraReference.x))/(2*cameraReference.x);
+			inputs += Vector2.right * rightMult;
 		}
 
 		// checking up swipe/key
 		if (Input.GetKeyDown("up") || (isSwipeCheckFinalized && !isSwipeCheckUsed && swipeResult == "up")){
-			inputs += Vector2.up;
+			float upMult = (2*cameraReference.y - (transf.position.y + cameraReference.y))/(2*cameraReference.y);
+			inputs += Vector2.up * upMult;
 		}
 
 		if (isSwipeCheckFinalized) isSwipeCheckUsed = true;
@@ -60,13 +74,17 @@ public class ThingyController : MonoBehaviour {
 			}
 		}
 
-		if (Input.GetMouseButtonUp(0)){
-			isSwipeCheckStarted = false;
+		if (Input.GetMouseButtonUp(0))
+			resetSwipeCheck();
+		
+	}
+
+	void resetSwipeCheck(){
+		isSwipeCheckStarted = false;
 			isSwipeCheckFinalized = false;
 			isSwipeCheckUsed = false;
 			swipeResult = null;
 			Debug.Log("swipe reset");
-		}
 	}
 
 	void addVelocity(Vector2 inputs){
@@ -75,11 +93,21 @@ public class ThingyController : MonoBehaviour {
 	}
 	
 	void Update () {
-		checkSwipe();
+		if (isSwipeInCooldown){
+			resetSwipeCheck();
 
-		Vector2 inputs = checkInput();
-		if (inputs != Vector2.zero){
-			addVelocity(inputs);
-		}
+			swipeTime += Time.deltaTime;
+			if (swipeTime >= swipeCooldown) isSwipeInCooldown = false; 
+		} else {
+			checkSwipe();
+
+			Vector2 inputs = checkInput();
+			if (inputs != Vector2.zero){
+				addVelocity(inputs);
+
+				isSwipeInCooldown = true;
+				swipeTime = 0f;
+			}
+		}	
 	}
 }
