@@ -8,6 +8,9 @@ public class RegionBehaviour : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         subRegions = GetComponentsInChildren<SubRegionBehaviour>();
+        if(subRegions.Length < 1) {
+            Debug.LogError("ERRO!, Dentro do Region deve haver objetos com scripts SubRegionBehaviour");
+        }
 	}
 	
     public void StartFill() {

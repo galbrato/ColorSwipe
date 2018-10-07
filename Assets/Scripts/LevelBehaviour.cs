@@ -9,6 +9,9 @@ public class LevelBehaviour : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         regions = GetComponentsInChildren<RegionBehaviour>();
+        if (regions.Length < 1) {
+            Debug.LogError("ERRO!, Dentro do Level deve haver objetos com scriipts RegionBehaviour");
+        }
         timer = 0;
 	}
 	

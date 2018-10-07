@@ -10,7 +10,6 @@ public class BoundaryBehaviour : MonoBehaviour {
     void Start () {
         float x =  Camera.main.orthographicSize * ((float)Screen.width / (float)Screen.height) + 0.5f;
         float y =  Camera.main.orthographicSize + 0.5f;
-        Debug.Log(Camera.main.orthographicSize + " " + Screen.width + " " + Screen.height + " " + (float)((float)Screen.width / (float)Screen.height) );
 
         transform.position = new Vector3( HSide * x, VSide * y);
         transform.localScale = new Vector2(VSide * 2 * x + HSide, HSide * 2 * y + VSide);
