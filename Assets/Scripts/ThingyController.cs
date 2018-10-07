@@ -5,6 +5,7 @@ using UnityEngine;
 public class ThingyController : MonoBehaviour {
 	private Rigidbody2D rigid;
 	private Transform transf;
+	private SpriteRenderer rend;
 	public float velocityFactor;
 
 	public static float swipeMinimumDistance = 5f;
@@ -19,10 +20,12 @@ public class ThingyController : MonoBehaviour {
 	public float swipeCooldown;
 	private float swipeTime = 0f;
 	private bool isSwipeInCooldown = false;
+	private float alphaMin = 0.3f;
 		
 	void Start () {
 		rigid = this.GetComponent<Rigidbody2D>();
 		transf = this.GetComponent<Transform>();
+		rend = this.GetComponent<SpriteRenderer>();
 
 		cameraReference.y = Camera.main.orthographicSize;
 		cameraReference.x = Camera.main.orthographicSize * ((float) Screen.width / (float) Screen.height);
@@ -91,12 +94,18 @@ public class ThingyController : MonoBehaviour {
 		Vector2 newVelocity = inputs * velocityFactor;
 		rigid.velocity = newVelocity;
 	}
+
+	void updateCooldownUI(){
+		rend.color = new Color(rend.color.r, rend.color.g, rend.color.b,
+								alphaMin + ((1 - alphaMin)*(swipeTime / swipeCooldown)));
+	}
 	
 	void Update () {
 		if (isSwipeInCooldown){
 			resetSwipeCheck();
 
 			swipeTime += Time.deltaTime;
+			updateCooldownUI();
 			if (swipeTime >= swipeCooldown) isSwipeInCooldown = false; 
 		} else {
 			checkSwipe();
@@ -107,6 +116,7 @@ public class ThingyController : MonoBehaviour {
 
 				isSwipeInCooldown = true;
 				swipeTime = 0f;
+				updateCooldownUI();
 			}
 		}	
 	}

@@ -56,6 +56,7 @@ MonoBehaviour:
   thingyPrefab: {fileID: 1407094432227970, guid: c6444e9de48ad5b49824338827a19294,
     type: 2}
   velocityFactor: 15
+  thingyCollector: {fileID: 0}
 --- !u!212 &212144980961040856
 SpriteRenderer:
   m_ObjectHideFlags: 1

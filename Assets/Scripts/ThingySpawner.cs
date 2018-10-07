@@ -5,6 +5,7 @@ using UnityEngine;
 public class ThingySpawner : MonoBehaviour {
 
 	private SpriteRenderer rend;
+
 	private Vector3 startingPoint;
 	private float offsetRange;
 
@@ -13,15 +14,19 @@ public class ThingySpawner : MonoBehaviour {
 	
 	public float velocityFactor;
 	private float countTime = 0f;
+
+	public Transform thingyCounter;
 		
 	void Start () {
 		rend = this.GetComponent<SpriteRenderer>();
+
 		startingPoint = rend.bounds.min;
 		offsetRange = rend.bounds.size.x;
 	}
 
 	void spawnThingy(){
-		GameObject newThingy = (GameObject) Instantiate(thingyPrefab);
+		GameObject newThingy = (GameObject) Instantiate(thingyPrefab, thingyCounter);
+
 		SpriteRenderer rendThingy = newThingy.GetComponent<SpriteRenderer>();
 		Transform transThingy = newThingy.GetComponent<Transform>();
 		Rigidbody2D rigidThingy = newThingy.GetComponent<Rigidbody2D>();
